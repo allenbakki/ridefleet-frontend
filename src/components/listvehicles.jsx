@@ -4,37 +4,62 @@ import axios from "axios";
 
 const columns = [
   {
-    title: "Maintenance Number",
-    dataIndex: "ServiceNumber",
-    key: "ServiceNumber",
+    title: "Vehicle Number",
+    dataIndex: "VehicleNumber",
+    key: "VehicleNumber",
   },
   {
-    title: "Date",
-    dataIndex: "Date",
-    key: "Date",
-    sorter: (a, b) => new Date(a.Date) - new Date(b.Date),
-    render: (date) => new Date(date).toLocaleString(),
+    title: "Vehicle Model",
+    dataIndex: "VehicleModel",
+    key: "VehicleModel",
+   
   },
   {
-    title: "Work Done",
-    dataIndex: "WorkDone",
-    key: "WorkDone",
+    title: "Vehicle Type",
+    dataIndex: "VehicleType",
+    key: "VehicleType",
   },
   {
-    title: "Notes",
-    dataIndex: "Notes",
-    key: "Notes",
+    title: "Vehicle Year",
+    dataIndex: "VehicleYear",
+    key: "VehicleYear",
   },
   {
-    title: "Future Recommendations",
-    dataIndex: "FutureRecommendations",
-    key: "FutureRecommendations",
+    title: "Vehicle Make",
+    dataIndex: "VehicleMake",
+    key: "VehicleMake",
   },
   {
-    title: "Cost ($)",
-    dataIndex: "paymentDetails",
-    key: "paymentDetails",
-    sorter: (a, b) => a.paymentDetails - b.paymentDetails,
+    title: "Vehicle Condition",
+    dataIndex: "VehicleCondition",
+    key: "VehicleCondition",
+  },
+  {
+    title: "Temperature",
+    dataIndex: "Temperature",
+    key: "Temperature",
+  }, {
+    title: "Speed",
+    dataIndex: "Speed",
+    key: "Speed",
+  }, {
+    title: "RPM",
+    dataIndex: "RPM",
+    key: "RPM",
+  },
+  {
+    title: "Type",
+    dataIndex: "PrivateCommercial",
+    key: "PrivateCommercial",
+  },{
+    title: "Oil Temperature",
+    dataIndex: "OilTemperature",
+    key: "OilTemperature",
+  },
+  {
+    title: "Odometer (miles)",
+    dataIndex: "Odometer",
+    key: "Odometer",
   },
 ];
 
@@ -49,10 +74,10 @@ const ListVehicle = ({ vehicleId, setTotalSpend, totalSpent }) => {
   // Fetch maintenance data
   useEffect(() => {
     axios
-      .get("http://localhost:8000/maintenance-history", {
-        params: { vehicleNo: vehicleId },
+      .get("http://localhost:8000/vehicles-list", {
       })
       .then((response) => {
+        console.log(response)
         setMaintenanceData(response.data);
         setLoading(false);
       })
@@ -61,22 +86,9 @@ const ListVehicle = ({ vehicleId, setTotalSpend, totalSpent }) => {
         message.error("Failed to fetch maintenance history.");
         setLoading(false);
       });
-  }, [vehicleId]);
+  }, []);
 
-  // Fetch total spend
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/total-spend", {
-        params: { vehicleNo: vehicleId },
-      })
-      .then((response) => {
-        setTotalSpend(response.data.totalSpent);
-      })
-      .catch((error) => {
-        console.error("Error fetching total spend:", error);
-        message.error("Failed to fetch total spend.");
-      });
-  }, [vehicleId, setTotalSpend]);
+  
 
   // Show modal to add new maintenance
   const showAddMaintenanceModal = () => {
@@ -164,44 +176,39 @@ const ListVehicle = ({ vehicleId, setTotalSpend, totalSpent }) => {
       >
         <Form form={form} onFinish={handleAddMaintenance} layout="vertical">
           <Form.Item
-            label="Service Number"
-            name="ServiceNumber"
+            label="Vehicle Model"
+            name="VehicleModel"
             rules={[{ required: true, message: "Please enter the service number" }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Date"
-            name="Date"
+            label="Vehicle Type"
+            name="VehicleType"
             rules={[{ required: true, message: "Please select a date" }]}
           >
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
+            <Input.TextArea />
+            </Form.Item>
 
           <Form.Item
-            label="Work Done"
-            name="WorkDone"
+            label="Vehicle Year"
+            name="VehicleYear"
             rules={[{ required: true, message: "Please enter the work done" }]}
           >
             <Input.TextArea />
           </Form.Item>
 
-          <Form.Item label="Notes" name="Notes">
-            <Input.TextArea />
-          </Form.Item>
-
-          <Form.Item label="Future Recommendations" name="FutureRecommendations">
-            <Input.TextArea />
-          </Form.Item>
-
           <Form.Item
-            label="Cost ($)"
-            name="paymentDetails"
-            rules={[{ required: true, message: "Please enter the cost" }]}
+            label="Vehicle Make"
+            name="VehicleMake"
+            rules={[{ required: true, message: "Please enter the work done" }]}
           >
-            <InputNumber style={{ width: "100%" }} />
+            <Input.TextArea />
           </Form.Item>
+
+
+          
 
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
@@ -212,16 +219,16 @@ const ListVehicle = ({ vehicleId, setTotalSpend, totalSpent }) => {
       </Modal>
 
       <Modal
-        title="Delete Maintenance Record"
+        title="Delete Vehicle Record"
         visible={isModalVisibleDelete}
         onCancel={() => setIsModalVisibleDelete(false)}
         footer={null}
       >
         <Form form={form} onFinish={handleDeleteMaintenance} layout="vertical">
           <Form.Item
-            label="Service Number"
-            name="ServiceNumber"
-            rules={[{ required: true, message: "Please enter the service number" }]}
+            label="VehicleNumber"
+            name="Vehicle Number"
+            rules={[{ required: true, message: "Please enter the Vehicle number" }]}
           >
             <Input />
           </Form.Item>
